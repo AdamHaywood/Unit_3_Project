@@ -48,3 +48,31 @@ $shirtDesign.on('change', function() {
     $('#color option:nth-child(1)').show().attr('selected', 'selected');
   }
 })
+
+
+// save a variable for total of activities and one for
+// adding the element to the html
+
+const $activities = $('.activities')
+const $activityBoxes = $('input[type=checkbox]')
+
+$activityBoxes.on('change', function(){
+  let $checkedActivities = $('input[type=checkbox]:checked');
+  console.log($checkedActivities);
+  let activityTotal = 0
+  $checkedActivities.each(function(i){
+    activityTotal += $(this).data('cost');  ;
+  });
+  let totalMessage = "<span>Total: " + activityTotal + "<span>"
+  if (activityTotal >= 0 ) {
+    $activities.append(totalMessage);
+  }
+});
+
+
+
+
+
+
+//dataset: DOMStringMap
+// cost: "200"
