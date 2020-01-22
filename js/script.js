@@ -50,8 +50,8 @@ $shirtDesign.on('change', function() {
 })
 
 
-// save a variable for total of activities and one for
-// adding the element to the html
+// the below variables and actions are to set up the activity
+// section of the project before the event listener works on the change
 
 const $activities = $('.activities')
 const $activityBoxes = $('input[type=checkbox]')
@@ -63,6 +63,9 @@ let $messageSpan = $('.activities span');
 $messageSpan.hide();
 
 
+// trying to get the activity section to work with adding up
+// the total but having trouble with it doing fibbonaci counting
+// going from 100 > 300 > 600 with each of the clicks on the $100 classes
 
 
 $activityBoxes.on('change', function(){
