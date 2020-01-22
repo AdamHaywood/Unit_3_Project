@@ -56,23 +56,32 @@ $shirtDesign.on('change', function() {
 const $activities = $('.activities')
 const $activityBoxes = $('input[type=checkbox]')
 
+let activityTotal = 0;
+let totalMessage = "<span>Total: " + activityTotal + "<span>";
+$activities.append(totalMessage);
+let $messageSpan = $('.activities span');
+$messageSpan.hide();
+
+
+
+
 $activityBoxes.on('change', function(){
   let $checkedActivities = $('input[type=checkbox]:checked');
-  console.log($checkedActivities);
-  let activityTotal = 0
   $checkedActivities.each(function(i){
-    activityTotal += $(this).data('cost');  ;
+    if ($(this).prop('checked')) {
+      activityTotal += $(this).data('cost');
+    } else {
+      activityTotal -= $(this).data('cost');
+      console.log($(this));
+    }
   });
-  let totalMessage = "<span>Total: " + activityTotal + "<span>"
-  if (activityTotal >= 0 ) {
-    $activities.append(totalMessage);
+  if (activityTotal >= 0) {
+    $messageSpan.show();
+    $messageSpan.text("Total: " + activityTotal);
+  } else {
+    $messageSpan.hide()
   }
 });
 
 
 
-
-
-
-//dataset: DOMStringMap
-// cost: "200"
