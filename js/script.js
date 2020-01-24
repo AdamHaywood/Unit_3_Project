@@ -199,30 +199,57 @@ checkEmail = () => {
 // credit card validation function
 checkCC = () => {
   const creditRegex = /\d{13}\d?\d?\d?/
-  const zipRegez = /\d{5}/
-  const cvvRegex = /\d{3}/
   if ($paymentChoice.val() === 'paypal' || $paymentChoice.val() === 'bitcoin') {
     validCreditCard = true;
-    validZip = true;
-    validCVV = true;
-  } else if (creditRegex.test($('#cc-num').val()) 
-  && zipRegez.test($('#zip').val())
-  && cvvRegex.test($('#cvv').val())) {
+  } else if (creditRegex.test($('#cc-num').val())) {
     validCreditCard = true
-    validZip = true;
-    validCVV = true;
     $('#cc-num').removeClass('invalid');
-    $('#zip').removeClass('invalid');
-    $('#cvv').removeClass('invalid')
   } else {
     validCreditCard = false;
-    validZip = false;
-    validCVV = false;
     $('#cc-num').addClass('invalid');
+  }
+}
+$('#cc-num').on('focusout', checkCC());
+
+
+// zip validation function
+checkZip = () => {
+  const zipRegez = /\d{5}/
+  if ($paymentChoice.val() === 'paypal' || $paymentChoice.val() === 'bitcoin') {
+    validZip = true;
+  } else if (zipRegez.test($('#zip').val())) {
+    validZip = true;
+    $('#zip').removeClass('invalid');
+  } else {
+    validZip = false;
     $('#zip').addClass('invalid');
+  }
+}
+
+$('#zip').on('focusout', checkZip());
+
+checkCVV = () => {
+  const cvvRegex = /\d{3}/
+  if ($paymentChoice.val() === 'paypal' || $paymentChoice.val() === 'bitcoin') {
+    validCVV = true;
+  } else if (cvvRegex.test($('#cvv').val())) {
+    validCVV = true;
+    $('#cvv').removeClass('invalid')
+  } else {
+    validCVV = false;
     $('#cvv').addClass('invalid');
   }
 }
+
+$('#cvv').on('focusout', checkCVV());
+
+
+
+
+
+
+
+
 
 
 $('form').on('submit', function(event){
@@ -230,12 +257,14 @@ $('form').on('submit', function(event){
   checkEmail();
   checkActs();
   checkCC();
+  checkZip();
+  checkCVV();
   if (validName === false
-    && validEmail === false
-    && validActivity === false
-    && validCreditCard === false
-    && validZip === false
-    && validZip === false) {
+    || validEmail === false
+    || validActivity === false
+    || validCreditCard === false
+    || validZip === false
+    || validZip === false) {
     event.preventDefault();
   }
 })
