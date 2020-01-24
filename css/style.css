@@ -180,6 +180,14 @@ option {
   clear: both;
 }
 
+.invalid {
+  border-color: red;
+}
+
+.invalid-act {
+  background-color: red;
+}
+
 /* ================================= 
   Media Queries
 ==================================== */

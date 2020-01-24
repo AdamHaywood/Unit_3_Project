@@ -1,4 +1,4 @@
-// variables to be called throughout project
+// variables to be called throughout first half of project
 const $userName = $('#name');
 const $jobRole = $('#title');
 const $otherField = $('#other-title');
@@ -49,8 +49,9 @@ $shirtDesign.on('change', function() {
   }
 })
 
-
-// the below variables and actions are to set up the activity
+// for the sake of readability i will declare variables for the various
+// functionality below to quick reference
+// the below variables and actions are to set up the activity section
 // section of the project before the event listener works on the change
 
 const $activities = $('.activities')
@@ -63,7 +64,27 @@ let $messageSpan = $('.activities span');
 $messageSpan.hide();
 
 
-// event handler and function below for totaling activty cost
+
+// activity section validation function
+const actError = '<sub class="invalid-act">Please select at least one Activity<sub>';
+$('.activities legend').append(actError);
+const $activityError = $('.invalid-act');
+$activityError.hide();
+
+checkActs = () => {
+  $activityBoxes.each(function(i){
+    if (activityTotal !== 0) {
+      validActivity = true;
+      $activityError.hide();
+    } else {
+      validActivity = false;
+      $activityError.show();
+    }
+  })
+}
+
+// event handler and function below for totaling activity cost
+
 
 $activityBoxes.on('change', function(){
   activityTotal = 0;
@@ -75,13 +96,14 @@ $activityBoxes.on('change', function(){
       activityTotal -= $(this).data('cost');
       console.log($(this));
     }
-  });
+  })
   if (activityTotal >= 0) {
     $messageSpan.show();
     $messageSpan.text("Total: $" + activityTotal);
   } else {
     $messageSpan.hide()
   }
+  checkActs();
 });
 
 // event handler and function for disabling concurrent times
@@ -112,7 +134,6 @@ $bitcoin.hide();
 $('#payment [value="select method"]').hide();
 
 $paymentChoice.on('change', function(event){
-  console.log($(this).val());
   if ($(this).val() === 'paypal') {
     $paypal.show();
     $bitcoin.hide();
@@ -129,4 +150,94 @@ $paymentChoice.on('change', function(event){
 });
 
 //validation begins below
+
+let validName = false;
+let validEmail = false;
+let validActivity = false;
+let validCreditCard = false;
+let validZip = false;
+let validCVV = false;
+
+// name validation functions
+$userName.on('focusout', function(){
+  if ($(this).val() !== '') {
+    validName = true;
+    $userName.removeClass('invalid');
+  } else {
+    validName = false;
+    $userName.addClass('invalid');
+  }
+})
+
+checkName = () => {
+  if (validName === 'false') {
+    $userName.addClass('invalid');
+  }
+}
+
+// mail validation functions
+$('#mail').on('focusout', function(){
+  const emailRegex = /^\w*@\w*\.\w*$/;
+  if (emailRegex.test($(this).val())) {
+    validEmail = true;
+    $(this).removeClass('invalid');
+  } else {
+    validEmail = false;
+    $(this).addClass('invalid');
+  }
+})
+
+checkEmail = () => {
+  if (validEmail === false) {
+    $('#mail').addClass('invalid');
+  }
+}
+
+
+
+
+// credit card validation function
+checkCC = () => {
+  const creditRegex = /\d{13}\d?\d?\d?/
+  const zipRegez = /\d{5}/
+  const cvvRegex = /\d{3}/
+  if ($paymentChoice.val() === 'paypal' || $paymentChoice.val() === 'bitcoin') {
+    validCreditCard = true;
+    validZip = true;
+    validCVV = true;
+  } else if (creditRegex.test($('#cc-num').val()) 
+  && zipRegez.test($('#zip').val())
+  && cvvRegex.test($('#cvv').val())) {
+    validCreditCard = true
+    validZip = true;
+    validCVV = true;
+    $('#cc-num').removeClass('invalid');
+    $('#zip').removeClass('invalid');
+    $('#cvv').removeClass('invalid')
+  } else {
+    validCreditCard = false;
+    validZip = false;
+    validCVV = false;
+    $('#cc-num').addClass('invalid');
+    $('#zip').addClass('invalid');
+    $('#cvv').addClass('invalid');
+  }
+}
+
+
+$('form').on('submit', function(event){
+  checkName();
+  checkEmail();
+  checkActs();
+  checkCC();
+  if (validName === false
+    && validEmail === false
+    && validActivity === false
+    && validCreditCard === false
+    && validZip === false
+    && validZip === false) {
+    event.preventDefault();
+  }
+})
+
 
