@@ -63,12 +63,10 @@ let $messageSpan = $('.activities span');
 $messageSpan.hide();
 
 
-// trying to get the activity section to work with adding up
-// the total but having trouble with it doing fibbonaci counting
-// going from 100 > 300 > 600 with each of the clicks on the $100 classes
-
+// event handler and function below for totaling activty cost
 
 $activityBoxes.on('change', function(){
+  activityTotal = 0;
   let $checkedActivities = $('input[type=checkbox]:checked');
   $checkedActivities.each(function(i){
     if ($(this).prop('checked')) {
@@ -80,11 +78,55 @@ $activityBoxes.on('change', function(){
   });
   if (activityTotal >= 0) {
     $messageSpan.show();
-    $messageSpan.text("Total: " + activityTotal);
+    $messageSpan.text("Total: $" + activityTotal);
   } else {
     $messageSpan.hide()
   }
 });
 
+// event handler and function for disabling concurrent times
 
+$activityBoxes.on('change', function (event){
+  let $currentCheckBox = $(event.target);
+  console.log($currentCheckBox);
+  $activityBoxes.each(function(i){
+    if ($currentCheckBox.prop('checked') && $currentCheckBox.data('day-and-time') === $(this).data('day-and-time')) {
+      $(this).prop('disabled', true);
+      $currentCheckBox.prop('disabled', false);
+    } else if ($currentCheckBox.prop('checked') === false && $currentCheckBox.data('day-and-time') === $(this).data('day-and-time')) {
+        $(this).prop('disabled', false);
+    }
+  })
+});
+
+// payment section will hide paypal and bitcoin messages unless chosen
+// initial declarations are for hiding by default and then using to determine
+// which method to display
+const $paymentChoice = $('#payment');
+const $creditCard = $('#credit-card');
+const $paypal = $('#paypal');
+const $bitcoin = $('#bitcoin');
+
+$paypal.hide();
+$bitcoin.hide();
+$('#payment [value="select method"]').hide();
+
+$paymentChoice.on('change', function(event){
+  console.log($(this).val());
+  if ($(this).val() === 'paypal') {
+    $paypal.show();
+    $bitcoin.hide();
+    $creditCard.hide();
+  } else if ($(this).val() === 'bitcoin') {
+    $paypal.hide();
+    $bitcoin.show();
+    $creditCard.hide();
+  } else {
+    $paypal.hide();
+    $bitcoin.hide();
+    $creditCard.show()
+  }
+});
+
+//validation begins below
 
