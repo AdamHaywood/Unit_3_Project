@@ -52,8 +52,6 @@ $shirtDesign.on('change', function() {
 // for the sake of readability i will declare variables for the various
 // functionality below to quick reference
 // the below variables and actions are to set up the activity section
-// section of the project before the event listener works on the change
-
 const $activities = $('.activities')
 const $activityBoxes = $('input[type=checkbox]')
 
@@ -62,7 +60,6 @@ let totalMessage = "<span>Total: " + activityTotal + "<span>";
 $activities.append(totalMessage);
 let $messageSpan = $('.activities span');
 $messageSpan.hide();
-
 
 
 // activity section validation function
@@ -84,8 +81,6 @@ checkActs = () => {
 }
 
 // event handler and function below for totaling activity cost
-
-
 $activityBoxes.on('change', function(){
   activityTotal = 0;
   let $checkedActivities = $('input[type=checkbox]:checked');
@@ -107,7 +102,6 @@ $activityBoxes.on('change', function(){
 });
 
 // event handler and function for disabling concurrent times
-
 $activityBoxes.on('change', function (event){
   let $currentCheckBox = $(event.target);
   console.log($currentCheckBox);
@@ -149,7 +143,7 @@ $paymentChoice.on('change', function(event){
   }
 });
 
-//validation begins below
+//validation begins below (aside from activity had to include it above)
 
 let validName = false;
 let validEmail = false;
@@ -193,9 +187,6 @@ checkEmail = () => {
   }
 }
 
-
-
-
 // credit card validation function
 checkCC = () => {
   const creditRegex = /\d{13}\d?\d?\d?/
@@ -209,7 +200,9 @@ checkCC = () => {
     $('#cc-num').addClass('invalid');
   }
 }
-$('#cc-num').on('focusout', checkCC());
+$('#cc-num').on('focusout', function(){
+  checkCC()
+});
 
 
 // zip validation function
@@ -225,9 +218,11 @@ checkZip = () => {
     $('#zip').addClass('invalid');
   }
 }
+$('#zip').on('focusout', function(){
+  checkZip()
+});
 
-$('#zip').on('focusout', checkZip());
-
+// ccv validation check
 checkCVV = () => {
   const cvvRegex = /\d{3}/
   if ($paymentChoice.val() === 'paypal' || $paymentChoice.val() === 'bitcoin') {
@@ -241,16 +236,12 @@ checkCVV = () => {
   }
 }
 
-$('#cvv').on('focusout', checkCVV());
+$('#cvv').on('focusout', function(){
+  checkCVV();
+});
 
 
-
-
-
-
-
-
-
+// final function in order to see if all 6 validations are true
 
 $('form').on('submit', function(event){
   checkName();
