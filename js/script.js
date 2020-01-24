@@ -126,6 +126,8 @@ const $bitcoin = $('#bitcoin');
 $paypal.hide();
 $bitcoin.hide();
 $('#payment [value="select method"]').hide();
+$('#payment [value="credit card"]').attr('selected', 'selected')
+
 
 $paymentChoice.on('change', function(event){
   if ($(this).val() === 'paypal') {
@@ -189,7 +191,7 @@ checkEmail = () => {
 
 // credit card validation function
 checkCC = () => {
-  const creditRegex = /\d{13}\d?\d?\d?/
+  const creditRegex = /^\d{13}\d?\d?\d?$/
   if ($paymentChoice.val() === 'paypal' || $paymentChoice.val() === 'bitcoin') {
     validCreditCard = true;
   } else if (creditRegex.test($('#cc-num').val())) {
@@ -201,13 +203,13 @@ checkCC = () => {
   }
 }
 $('#cc-num').on('focusout', function(){
-  checkCC()
+  checkCC();
 });
 
 
 // zip validation function
 checkZip = () => {
-  const zipRegez = /\d{5}/
+  const zipRegez = /^\d{5}$/
   if ($paymentChoice.val() === 'paypal' || $paymentChoice.val() === 'bitcoin') {
     validZip = true;
   } else if (zipRegez.test($('#zip').val())) {
@@ -219,17 +221,17 @@ checkZip = () => {
   }
 }
 $('#zip').on('focusout', function(){
-  checkZip()
+  checkZip();
 });
 
 // ccv validation check
 checkCVV = () => {
-  const cvvRegex = /\d{3}/
+  const cvvRegex = /^\d{3}$/
   if ($paymentChoice.val() === 'paypal' || $paymentChoice.val() === 'bitcoin') {
     validCVV = true;
   } else if (cvvRegex.test($('#cvv').val())) {
     validCVV = true;
-    $('#cvv').removeClass('invalid')
+    $('#cvv').removeClass('invalid');
   } else {
     validCVV = false;
     $('#cvv').addClass('invalid');
